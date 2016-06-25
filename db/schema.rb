@@ -11,24 +11,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160625121809) do
+ActiveRecord::Schema.define(version: 20160625171045) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "brand_options", force: :cascade do |t|
+    t.integer  "brand_id"
+    t.string   "key"
+    t.string   "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "brands", force: :cascade do |t|
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.integer  "facebook_id"
+    t.string   "facebook_id"
     t.string   "name"
     t.string   "page_URL"
-    t.integer  "gender"
-    t.integer  "type"
-    t.integer  "style"
-    t.integer  "price"
-    t.integer  "music"
-    t.integer  "mood"
-    t.integer  "personality"
   end
 
   create_table "matches", force: :cascade do |t|
@@ -42,16 +43,16 @@ ActiveRecord::Schema.define(version: 20160625121809) do
   create_table "users", force: :cascade do |t|
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.integer  "facebook_id"
+    t.string   "facebook_id"
     t.string   "first_name"
     t.string   "last_name"
-    t.integer  "gender"
-    t.integer  "type"
-    t.integer  "style"
-    t.integer  "price"
-    t.integer  "music"
-    t.integer  "mood"
-    t.integer  "personality"
+    t.string   "gender"
+    t.string   "type"
+    t.string   "style"
+    t.string   "price"
+    t.string   "music"
+    t.string   "mood"
+    t.string   "personality"
   end
 
 end

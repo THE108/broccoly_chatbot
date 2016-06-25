@@ -1,5 +1,9 @@
 class MarkupBrandsTable < ActiveRecord::Migration
   def change
+    create_table :brands do |t|
+
+      t.timestamps null: false
+    end
   	add_column :brands, :facebook_id, :integer
   	add_column :brands, :name, :string
   	add_column :brands, :page_URL, :string

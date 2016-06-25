@@ -10,6 +10,7 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    @brands = @user.matching_brands
   end
 
   # GET /users/new

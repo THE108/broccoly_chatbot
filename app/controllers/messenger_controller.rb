@@ -85,6 +85,8 @@ postback?: #{fb_params.postback?}"
       end
     end
     render nothing: true, status: 200
+  rescue
+    render nothing: true, status: 200
   end
 
   private

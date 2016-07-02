@@ -26,11 +26,11 @@ Bot.on :message do |message|
           createQuickReply(
               message.sender,
               'In what price tier do you prefer to shop?',
-              'Mass Market (<$200)',
-              'Contemporary ($200-400)',
-              'Luxury ($400-1000+)',
+              '<$200',
+              '$200-400',
+              '$400-1000+',
           )
-        when 'Mass Market (<$200)', 'Contemporary ($200-400)', 'Luxury ($400-1000+)'
+        when '<$200', '$200-400', '$400-1000+'
           User.where(facebook_id: sender_id).update_all(price_category: value)
           createQuickReply(
               message.sender,
@@ -53,11 +53,11 @@ Bot.on :message do |message|
           createQuickReply(
               message.sender,
               'Do you like playing games on your mobile phone?',
-              'I love playing games!',
-              'I play games some times',
-              'I don\'t play games on my phone',
+              'I love it',
+              'Sometimes',
+              'Never',
           )
-        when 'I love playing games!', 'I play games some times', 'I don\'t play games on my phone'
+        when 'I love it', 'Sometimes', 'Never'
           User.where(facebook_id: sender_id).update_all(cpu_category: value)
           item = User.find_by(facebook_id: sender_id).matching_item
           createGenericTemplateForItem(sender_id, item)

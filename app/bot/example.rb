@@ -1,6 +1,7 @@
 include Facebook::Messenger
 
 Bot.on :message do |message|
+  puts message.inspect
   Bot.deliver(
       recipient: message.sender,
       message: {

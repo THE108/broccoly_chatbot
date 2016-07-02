@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:stamm/messenger-ruby.git
+  remote: https://github.com/stamm/messenger-ruby.git
   revision: 01a419d43d205e017ca86a57a90858ca38faa6aa
   specs:
     messenger-ruby (1.1.5)

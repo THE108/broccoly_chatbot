@@ -51,5 +51,5 @@ group :production do
   gem 'rails_12factor'
 end
 
-gem 'messenger-ruby'
+gem 'messenger-ruby', '1.1.5'
 gem 'rest-client', '1.8.0'

@@ -142,8 +142,10 @@ def createQuickReply(sender, name, *options)
 
   Bot.deliver(
       recipient: sender,
-      text: name,
-      quick_replies: replies,
+      message: {
+        text: name,
+        quick_replies: replies,
+      }
   )
 end
 

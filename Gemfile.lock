@@ -1,3 +1,10 @@
+GIT
+  remote: git@github.com:stamm/messenger-ruby.git
+  revision: 01a419d43d205e017ca86a57a90858ca38faa6aa
+  specs:
+    messenger-ruby (1.1.5)
+      rest-client (>= 1.7.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -73,8 +80,6 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.6.4)
       mime-types (>= 1.16, < 4)
-    messenger-ruby (1.1.5)
-      rest-client (>= 1.7.0)
     mime-types (2.99.2)
     mini_portile2 (2.1.0)
     minitest (5.9.0)
@@ -170,7 +175,7 @@ DEPENDENCIES
   coffee-rails (~> 4.1.0)
   jbuilder (~> 2.0)
   jquery-rails
-  messenger-ruby (= 1.1.5)
+  messenger-ruby!
   pg (~> 0.15)
   rails (= 4.2.6)
   rails_12factor

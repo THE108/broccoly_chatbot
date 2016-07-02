@@ -10,7 +10,8 @@ Bot.on :message do |message|
       item = User.find_by(facebook_id: sender_id).matching_item
       createGenericTemplateForItem(sender_id, item)
     elsif message.messaging['message']['quick_reply']
-      case message.text
+      value = message.text
+      case value
         when 'Silver', 'Grey', 'Gold'
           User.where(facebook_id: sender_id).update_all(color: value)
           createQuickReply(

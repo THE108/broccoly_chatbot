@@ -36,7 +36,7 @@ Bot.on :message do |message|
           User.where(facebook_id: sender_id).update_all(price_category: value)
           createQuickReply(
               message.sender,
-              'Cool! Do you like to take fotos?.',
+              'Cool! Do you like to take fotos?',
               'Sure',
               'Not so much',
               'Not at all',

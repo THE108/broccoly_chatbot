@@ -1,29 +1,29 @@
 class MessengerController < Messenger::MessengerController
   def webhook
     # logger.debug "params: #{params}"
-    logger.debug "message?: #{fb_params.message?}
-delivery?: #{fb_params.delivery?}
-postback?: #{fb_params.postback?}"
+    logger.debug "message?: #{fb_params.first_entry.callback.message?}
+delivery?: #{fb_params.first_entry.callback.delivery?}
+postback?: #{fb_params.first_entry.callback.postback?}"
 
-    if fb_params.message?
+    if fb_params.first_entry.callback.message?
       Messenger::Client.send(
           Messenger::Request.new(
-              Messenger::Elements::Text.new(text: "Your wrote #{fb_params.text_message}"),
-              fb_params.sender_id
+              Messenger::Elements::Text.new(text: "Your wrote #{fb_params.first_entry.callback.text}"),
+              fb_params.first_entry.sender_id
           )
       )
     end
 
-    unless User.exists?(facebook_id: fb_params.sender_id)
-      fb_data = JSON.parse(Messenger::Client.get_user_profile(fb_params.sender_id))
+    unless User.exists?(facebook_id: fb_params.first_entry.sender_id)
+      fb_data = JSON.parse(Messenger::Client.get_user_profile(fb_params.first_entry.sender_id))
       User.create(
-        facebook_id: fb_params.sender_id,
+        facebook_id: fb_params.first_entry.sender_id,
         first_name: fb_data['first_name'],
         last_name: fb_data['last_name']
       )
 
     end
-    if fb_params.postback?
+    if fb_params.first_entry.callback.postback?
       value = fb_params.send(:messaging_entry)['postback']['payload']
       case value
       when 'Go!'
@@ -34,7 +34,7 @@ postback?: #{fb_params.postback?}"
               'Gold',
           )
       when 'Silver', 'Grey', 'Gold'
-          User.where(facebook_id: fb_params.sender_id).update_all(color: value)
+          User.where(facebook_id: fb_params.first_entry.sender_id).update_all(color: value)
           createButtonTemplate(
               'What is your preffered mobile platform?',
               'iOS',
@@ -42,7 +42,7 @@ postback?: #{fb_params.postback?}"
               'Windows',
           )
       when 'iOS', 'Android', 'Windows'
-          User.where(facebook_id: fb_params.sender_id).update_all(platform: value)
+          User.where(facebook_id: fb_params.first_entry.sender_id).update_all(platform: value)
           createButtonTemplate(
             'In what price tier do you prefer to shop?',
             'Mass Market (<$200)',
@@ -50,7 +50,7 @@ postback?: #{fb_params.postback?}"
             'Luxury ($400-1000+)',
           )
       when 'Mass Market (<$200)', 'Contemporary ($200-400)', 'Luxury ($400-1000+)'
-        User.where(facebook_id: fb_params.sender_id).update_all(price_category: value)
+        User.where(facebook_id: fb_params.first_entry.sender_id).update_all(price_category: value)
           createButtonTemplate(
               'Cool! Do you like to take fotos?.',
               'Sure',
@@ -58,7 +58,7 @@ postback?: #{fb_params.postback?}"
               'Not at all',
           )
       when 'Sure', 'Not so much', 'Not at all'
-        User.where(facebook_id: fb_params.sender_id).update_all(camera: value)
+        User.where(facebook_id: fb_params.first_entry.sender_id).update_all(camera: value)
         createButtonTemplate(
           'And how many sim cards you would like to have?',
           'Only one',
@@ -66,7 +66,7 @@ postback?: #{fb_params.postback?}"
           'Three or more',
         )
       when 'Only one', 'Two', 'Three or more'
-        User.where(facebook_id: fb_params.sender_id).update_all(sim_count: value)
+        User.where(facebook_id: fb_params.first_entry.sender_id).update_all(sim_count: value)
         createButtonTemplate(
           'Do you like playing games on your mobile phone?',
           'I love playing games!',
@@ -74,12 +74,12 @@ postback?: #{fb_params.postback?}"
           'I don\'t play games on my phone',
         )
       when 'I love playing games!', 'I play games some times', 'I don\'t play games on my phone'
-        User.where(facebook_id: fb_params.sender_id).update_all(cpu_category: value)
-        item = User.find_by(facebook_id: fb_params.sender_id).matching_item
+        User.where(facebook_id: fb_params.first_entry.sender_id).update_all(cpu_category: value)
+        item = User.find_by(facebook_id: fb_params.first_entry.sender_id).matching_item
         Messenger::Client.send(
           Messenger::Request.new(
             createGenericTemplateForItem(item),
-            fb_params.sender_id
+            fb_params.first_entry.sender_id
           )
         )
       end
@@ -106,7 +106,7 @@ postback?: #{fb_params.postback?}"
         Messenger::Request.new(Messenger::Templates::Buttons.new(
             text: name,
             buttons: buttons,
-        ), fb_params.sender_id)
+        ), fb_params.first_entry.sender_id)
     )
   end
 

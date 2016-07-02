@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
 				args.push(option, value)
 			end
 		end
-		item_id = ItemOption.where(where.join(' OR '), *args).group(:item_id).order('COUNT(*) DESC').limit(1).pluck(:item_id)
+		item_id = ItemOption.where(where.join(' OR '), *args).group(:item_id).order('COUNT(*) DESC').limit(1).pluck(:item_id)[0]
 		Item.find(item_id)
 	end
 end

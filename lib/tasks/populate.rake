@@ -1,8 +1,10 @@
 task :populate => [:environment] do
-  BrandOption.delete_all
-  file = "#{Rails.root}/populate_options.csv"
+  [Item, ItemOption].each do |model|
+    model.delete_all
+    file = "#{Rails.root}/populate_#{model.table_name}.csv"
 
-  CSV.foreach(file, headers: true) do |row|
-    BrandOption.create! row.to_hash
+    CSV.foreach(file, headers: true) do |row|
+      model.create! row.to_hash
+    end
   end
 end

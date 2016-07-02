@@ -85,7 +85,8 @@ postback?: #{fb_params.postback?}"
       end
     end
     render nothing: true, status: 200
-  rescue
+  rescue Exception => e
+    logger.debug "EXCEPTION!!!! #{e.message} #{e.backtrace}"
     render nothing: true, status: 200
   end
 

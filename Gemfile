@@ -51,6 +51,6 @@ group :production do
   gem 'rails_12factor'
 end
 
-gem 'messenger-ruby', git: 'git@github.com:stamm/messenger-ruby.git'
+gem 'messenger-ruby', git: 'https://github.com/stamm/messenger-ruby.git'
 # gem 'messenger-ruby', path: '/Users/stamm/code/messenger-ruby'
 gem 'rest-client', '1.8.0'

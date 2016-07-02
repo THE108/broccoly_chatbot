@@ -1,14 +1,14 @@
-include Facebook::Messenger
-
-Bot.on :message do |message|
-  puts message.inspect
-  Bot.deliver(
-      recipient: message.sender,
-      message: {
-          text: 'Hello, human!'
-      }
-  )
-end
+# include Facebook::Messenger
+#
+# Bot.on :message do |message|
+#   puts message.inspect
+#   Bot.deliver(
+#       recipient: message.sender,
+#       message: {
+#           text: 'Hello, human!'
+#       }
+#   )
+# end
 
 
 # def webhook

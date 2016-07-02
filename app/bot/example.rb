@@ -10,7 +10,7 @@ Bot.on :message do |message|
       item = User.find_by(facebook_id: sender_id).matching_item
       createGenericTemplateForItem(sender_id, item)
     elsif message.text == 'restart'
-      start_question(postback.sender)
+      start_question(message.sender)
     elsif message.messaging['message']['quick_reply']
       value = message.text
       case value

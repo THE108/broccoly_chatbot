@@ -51,5 +51,5 @@ group :production do
   gem 'rails_12factor'
 end
 
-gem 'facebook-messenger', '0.7.0'
-gem 'rest-client', '1.8.0'
+# gem 'facebook-messenger', '0.7.0'
+# gem 'rest-client', '1.8.0'

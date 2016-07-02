@@ -2,7 +2,7 @@ include Facebook::Messenger
 
 Bot.on :message do |message|
   puts message.inspect
-  if message.sender['id'] != '255096811549063'
+  unless message.echo?
     Bot.deliver(
         recipient: message.sender,
         message: {

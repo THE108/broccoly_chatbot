@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/stamm/facebook-messenger.git
+  revision: 2321c7114dbf1598ea91ab3838ed1e137b3270a4
+  specs:
+    facebook-messenger (0.7.0)
+      httparty (~> 0.13.7)
+      rack (>= 1.6.4)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -54,9 +62,6 @@ GEM
     debug_inspector (0.0.2)
     erubis (2.7.0)
     execjs (2.7.0)
-    facebook-messenger (0.7.0)
-      httparty (~> 0.13.7)
-      rack (>= 1.6.4)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     httparty (0.13.7)
@@ -161,7 +166,7 @@ DEPENDENCIES
   bundle
   byebug
   coffee-rails (~> 4.1.0)
-  facebook-messenger (= 0.7.0)
+  facebook-messenger!
   jbuilder (~> 2.0)
   jquery-rails
   pg (~> 0.15)

@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/stamm/messenger-ruby.git
-  revision: 01a419d43d205e017ca86a57a90858ca38faa6aa
+  revision: 652504f0df45cf19f2d9f47cdb74b75aeff869c2
   specs:
     messenger-ruby (1.1.5)
       rest-client (>= 1.7.0)

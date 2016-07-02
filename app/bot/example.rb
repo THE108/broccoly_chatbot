@@ -2,7 +2,8 @@ include Facebook::Messenger
 
 Bot.on :message do |message|
   puts message.inspect
-  save_user(message.sender['id'])
+  sender_id = message.sender['id']
+  save_user(sender_id)
 
   unless message.echo?
     if message.text == "secret"

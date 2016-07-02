@@ -5,6 +5,15 @@ class MessengerController < Messenger::MessengerController
 delivery?: #{fb_params.delivery?}
 postback?: #{fb_params.postback?}"
 
+    if fb_params.message?
+      Messenger::Client.send(
+          Messenger::Request.new(
+              Messenger::Elements::Text.new(text: "Your wrote #{fb_params.text_message}"),
+              fb_params.sender_id
+          )
+      )
+    end
+
     unless User.exists?(facebook_id: fb_params.sender_id)
       fb_data = JSON.parse(Messenger::Client.get_user_profile(fb_params.sender_id))
       User.create(

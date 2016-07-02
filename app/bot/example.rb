@@ -5,12 +5,18 @@ Bot.on :message do |message|
   save_user(message.sender['id'])
 
   unless message.echo?
-    Bot.deliver(
-        recipient: message.sender,
-        message: {
-            text: 'Hello, human!'
-        }
-    )
+    if message.text = "secret"
+      User.where(facebook_id: sender_id).update_all(cpu_category: value)
+      item = User.find_by(facebook_id: sender_id).matching_item
+      createGenericTemplateForItem(sender_id, item)
+    else
+      Bot.deliver(
+          recipient: message.sender,
+          message: {
+              text: 'Hello, human!'
+          }
+      )
+    end
   end
 end
 

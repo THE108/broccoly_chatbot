@@ -2,12 +2,14 @@ include Facebook::Messenger
 
 Bot.on :message do |message|
   puts message.inspect
-  Bot.deliver(
-      recipient: message.sender,
-      message: {
-          text: 'Hello, human!'
-      }
-  )
+  if message.sender['id'] != '255096811549063'
+    Bot.deliver(
+        recipient: message.sender,
+        message: {
+            text: 'Hello, human!'
+        }
+    )
+  end
 end
 
 

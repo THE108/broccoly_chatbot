@@ -2,9 +2,10 @@ Rails.application.routes.draw do
   resources :item_options
   get 'welcome/index'
 
+  post 'messenger/webhook'
   resources :users
   resources :brands
-  mount Facebook::Messenger::Server, at: 'messenger'
+  # mount Facebook::Messenger::Server, at: 'messenger'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

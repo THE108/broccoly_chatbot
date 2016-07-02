@@ -15,7 +15,7 @@ Bot.on :message do |message|
         when 'Silver', 'Grey', 'Gold'
           User.where(facebook_id: sender_id).update_all(color: value)
           createQuickReply(
-              postback.sender,
+              message.sender,
               'What is your preffered mobile platform?',
               'iOS',
               'Android',
@@ -24,7 +24,7 @@ Bot.on :message do |message|
         when 'iOS', 'Android', 'Windows'
           User.where(facebook_id: sender_id).update_all(platform: value)
           createQuickReply(
-              postback.sender,
+              message.sender,
               'In what price tier do you prefer to shop?',
               'Mass Market (<$200)',
               'Contemporary ($200-400)',
@@ -33,7 +33,7 @@ Bot.on :message do |message|
         when 'Mass Market (<$200)', 'Contemporary ($200-400)', 'Luxury ($400-1000+)'
           User.where(facebook_id: sender_id).update_all(price_category: value)
           createQuickReply(
-              postback.sender,
+              message.sender,
               'Cool! Do you like to take fotos?.',
               'Sure',
               'Not so much',
@@ -42,7 +42,7 @@ Bot.on :message do |message|
         when 'Sure', 'Not so much', 'Not at all'
           User.where(facebook_id: sender_id).update_all(camera: value)
           createQuickReply(
-              postback.sender,
+              message.sender,
               'And how many sim cards you would like to have?',
               'Only one',
               'Two',
@@ -51,7 +51,7 @@ Bot.on :message do |message|
         when 'Only one', 'Two', 'Three or more'
           User.where(facebook_id: sender_id).update_all(sim_count: value)
           createQuickReply(
-              postback.sender,
+              message.sender,
               'Do you like playing games on your mobile phone?',
               'I love playing games!',
               'I play games some times',

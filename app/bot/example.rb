@@ -6,9 +6,11 @@ Bot.on :message do |message|
   save_user(sender_id)
 
   unless message.echo?
-    if message.text == "secret"
+    if message.text == "result"
       item = User.find_by(facebook_id: sender_id).matching_item
       createGenericTemplateForItem(sender_id, item)
+    elsif message.text == 'restart'
+      start_question(postback.sender)
     elsif message.messaging['message']['quick_reply']
       value = message.text
       case value
@@ -83,15 +85,18 @@ Bot.on :postback do |postback|
 
   case value
     when 'Go!'
-      createQuickReply(
-          postback.sender,
-          'Great. Which is your favorite color?',
-          'Silver',
-          'Grey',
-          'Gold',
-      )
-
+      start_question(postback.sender)
   end
+end
+
+def start_question(sender)
+  createQuickReply(
+      sender,
+      'Great. Which is your favorite color?',
+      'Silver',
+      'Grey',
+      'Gold',
+  )
 end
 
 def save_user(sender_id)

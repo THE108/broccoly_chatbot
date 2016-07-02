@@ -9,7 +9,7 @@ Bot.on :message do |message|
     if message.text == "secret"
       item = User.find_by(facebook_id: sender_id).matching_item
       createGenericTemplateForItem(sender_id, item)
-    elsif message.messaging['quick_reply']
+    elsif message.messaging['message']['quick_reply']
       case message.text
         when 'Silver', 'Grey', 'Gold'
           User.where(facebook_id: sender_id).update_all(color: value)

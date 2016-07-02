@@ -9,6 +9,58 @@ Bot.on :message do |message|
     if message.text == "secret"
       item = User.find_by(facebook_id: sender_id).matching_item
       createGenericTemplateForItem(sender_id, item)
+    elsif message.messaging['quick_reply']
+      case message.text
+        when 'Silver', 'Grey', 'Gold'
+          User.where(facebook_id: sender_id).update_all(color: value)
+          createQuickReply(
+              postback.sender,
+              'What is your preffered mobile platform?',
+              'iOS',
+              'Android',
+              'Windows',
+          )
+        when 'iOS', 'Android', 'Windows'
+          User.where(facebook_id: sender_id).update_all(platform: value)
+          createQuickReply(
+              postback.sender,
+              'In what price tier do you prefer to shop?',
+              'Mass Market (<$200)',
+              'Contemporary ($200-400)',
+              'Luxury ($400-1000+)',
+          )
+        when 'Mass Market (<$200)', 'Contemporary ($200-400)', 'Luxury ($400-1000+)'
+          User.where(facebook_id: sender_id).update_all(price_category: value)
+          createQuickReply(
+              postback.sender,
+              'Cool! Do you like to take fotos?.',
+              'Sure',
+              'Not so much',
+              'Not at all',
+          )
+        when 'Sure', 'Not so much', 'Not at all'
+          User.where(facebook_id: sender_id).update_all(camera: value)
+          createQuickReply(
+              postback.sender,
+              'And how many sim cards you would like to have?',
+              'Only one',
+              'Two',
+              'Three or more',
+          )
+        when 'Only one', 'Two', 'Three or more'
+          User.where(facebook_id: sender_id).update_all(sim_count: value)
+          createQuickReply(
+              postback.sender,
+              'Do you like playing games on your mobile phone?',
+              'I love playing games!',
+              'I play games some times',
+              'I don\'t play games on my phone',
+          )
+        when 'I love playing games!', 'I play games some times', 'I don\'t play games on my phone'
+          User.where(facebook_id: sender_id).update_all(cpu_category: value)
+          item = User.find_by(facebook_id: sender_id).matching_item
+          createGenericTemplateForItem(sender_id, item)
+      end
     else
       Bot.deliver(
           recipient: message.sender,
@@ -37,55 +89,7 @@ Bot.on :postback do |postback|
           'Grey',
           'Gold',
       )
-    when 'Silver', 'Grey', 'Gold'
-      User.where(facebook_id: sender_id).update_all(color: value)
-      createQuickReply(
-          postback.sender,
-          'What is your preffered mobile platform?',
-          'iOS',
-          'Android',
-          'Windows',
-      )
-    when 'iOS', 'Android', 'Windows'
-      User.where(facebook_id: sender_id).update_all(platform: value)
-      createQuickReply(
-          postback.sender,
-          'In what price tier do you prefer to shop?',
-          'Mass Market (<$200)',
-          'Contemporary ($200-400)',
-          'Luxury ($400-1000+)',
-      )
-    when 'Mass Market (<$200)', 'Contemporary ($200-400)', 'Luxury ($400-1000+)'
-      User.where(facebook_id: sender_id).update_all(price_category: value)
-      createButtonTemplate(
-          postback.sender,
-          'Cool! Do you like to take fotos?.',
-          'Sure',
-          'Not so much',
-          'Not at all',
-      )
-    when 'Sure', 'Not so much', 'Not at all'
-      User.where(facebook_id: sender_id).update_all(camera: value)
-      createButtonTemplate(
-          postback.sender,
-          'And how many sim cards you would like to have?',
-          'Only one',
-          'Two',
-          'Three or more',
-      )
-    when 'Only one', 'Two', 'Three or more'
-      User.where(facebook_id: sender_id).update_all(sim_count: value)
-      createButtonTemplate(
-          postback.sender,
-          'Do you like playing games on your mobile phone?',
-          'I love playing games!',
-          'I play games some times',
-          'I don\'t play games on my phone',
-      )
-    when 'I love playing games!', 'I play games some times', 'I don\'t play games on my phone'
-      User.where(facebook_id: sender_id).update_all(cpu_category: value)
-      item = User.find_by(facebook_id: sender_id).matching_item
-      createGenericTemplateForItem(sender_id, item)
+
   end
 end
 

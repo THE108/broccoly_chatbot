@@ -128,7 +128,24 @@ def createButtonTemplate(sender, name, *options)
           }
       }
   )
+  end
+end
 
+def createQuickReplie(sender, name, *options)
+  replies = []
+  options.each do |val|
+    replies.push({
+        content_type: 'text',
+        title: val,
+        payload: val
+     })
+  end
+
+  Bot.deliver(
+      recipient: sender,
+      text: name,
+      quick_replies: replies,
+  )
 end
 
 def createGenericTemplateForItem(sender_id, item)
@@ -165,6 +182,3 @@ end
 def getVoucher
   rand(36**5).to_s(36)
 end
-
-# def createQuickReplie(name, *options)
-# end

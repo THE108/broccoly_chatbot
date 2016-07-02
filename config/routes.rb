@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   get 'welcome/index'
 
   post 'messenger/webhook'
+  get 'messenger/webhook'
   resources :users
   resources :brands
   # mount Facebook::Messenger::Server, at: 'messenger'

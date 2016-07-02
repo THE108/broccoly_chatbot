@@ -17,7 +17,7 @@ postback?: #{fb_params.postback?}"
     if fb_params.postback?
       value = fb_params.send(:messaging_entry)['postback']['payload']
       case value
-      when 'lets starts'
+      when 'Go!'
         createButtonTemplate(
             'Select gender you identity with',
             'Female',
@@ -27,70 +27,65 @@ postback?: #{fb_params.postback?}"
       when 'Male', 'Female', 'Neutral'
         User.where(facebook_id: fb_params.sender_id).update_all(gender: value)
         createButtonTemplate(
-            'Great. Now please select type of items are you looking for.',
-            'Clothing',
-            'Accessories',
-            'Shoes',
-            # 'All',
+            'Great. Which is your favorite mobile phone brand?',
+            'Apple',
+            'Sumsung',
+            'Huawei',
         )
-        when 'Clothing', 'Accessories', 'Shoes', 'All'
-          User.where(facebook_id: fb_params.sender_id).update_all(piece: value)
+      when 'Apple', 'Sumsung', 'Huawei'
+        User.where(facebook_id: fb_params.sender_id).update_all(brand: value)
+        createButtonTemplate(
+            'What is your preffered mobile platform?',
+            'iOS',
+            'Android',
+            'Windows',
+        )
+      when 'iOS', 'Android', 'Windows'
+        User.where(facebook_id: fb_params.sender_id).update_all(platform: value)
+        createButtonTemplate(
+          'In what price tier do you prefer to shop?',
+          'Mass Market (<$200)',
+          'Contemporary ($200-400)',
+          'Luxury ($400-1000+)',
+        )
+      when 'Mass Market (<$200)', 'Contemporary ($200-400)', 'Luxury ($400-1000+)'
+        User.where(facebook_id: fb_params.sender_id).update_all(price_category: value)
           createButtonTemplate(
-              'What about your aesthetics? Select the word that most matches your style',
-              'Casual',
-              'Formal',
-              'Active',
-              # 'Avant-Garde',
+              'Cool! Do you like to take fotos?.',
+              'Sure',
+              'Not so much',
+              'Not at all',
           )
-        when 'Casual', 'Formal', 'Active', 'Avant-Garde'
-          User.where(facebook_id: fb_params.sender_id).update_all(style: value)
-          createButtonTemplate(
-              'In what price tier do you prefer to shop?',
-              'Mass Market (<$200)',
-              'Contemporary ($150-450)',
-              'Luxury ($400-1000+)',
-          )
-        when 'Mass Market (<$200)', 'Contemporary ($150-450)', 'Luxury ($400-1000+)'
-          User.where(facebook_id: fb_params.sender_id).update_all(price: value)
-          createButtonTemplate(
-              'Cool! Select the music style you prefer.',
-              'Pop/Indie',
-              'Rock',
-              'Club/Dance',
-              # 'Country/Latin',
-          )
-        when 'Pop/Indie', 'Rock', 'Club/Dance', 'Country/Latin'
-          User.where(facebook_id: fb_params.sender_id).update_all(music: value)
-          createButtonTemplate(
-              'And what word best describes your most common mood?',
-              'Fun/Excited',
-              'Chill/Relaxed',
-              'Focused',
-              # 'Sad/Disapointed/confused',
-          )
-        when 'Fun/Excited', 'Chill/Relaxed', 'Focused', 'Sad/Disapointed/confused',
-          User.where(facebook_id: fb_params.sender_id).update_all(mood: value)
-          createButtonTemplate(
-              'How would you describe your personality?',
-              'Adventurous',
-              'Self-Centered',
-              'Open/Kind',
-              # 'Closed/Introvert',
-          )
-        when 'Adventurous', 'Self-Centered', 'Open/Kind', 'Closed/Introvert',
-          User.where(facebook_id: fb_params.sender_id).update_all(personality: value)
+      when 'Sure', 'Not so much', 'Not at all'
+        User.where(facebook_id: fb_params.sender_id).update_all(camera: value)
+        createButtonTemplate(
+          'And how many sim cards you wish your phone has?',
+          'Only one',
+          'Two',
+          'Three or more',
+        )
+      when 'Only one', 'Two', 'Three or more'
+        User.where(facebook_id: fb_params.sender_id).update_all(mood: value)
+        createButtonTemplate(
+          'Do you like playing games on your mobile phone?',
+          'I love playing games!',
+          'I play games some times',
+          'I don\'t play games on my phone',
+        )
+      when 'I love playing games!', 'I play games some times', 'I don\'t play games on my phone'
+        User.where(facebook_id: fb_params.sender_id).update_all(personality: value)
 
-          brands = User.find_by(facebook_id: fb_params.sender_id).matching_brands.first(3)
-          Messenger::Client.send(
-              Messenger::Request.new(
-                  Messenger::Elements::Text.new(text: "Your brands are #{brands.map(&:name).join(', ')}"),
-                  fb_params.sender_id
-              )
+        items = User.find_by(facebook_id: fb_params.sender_id).matching_items.first(3)
+        Messenger::Client.send(
+          Messenger::Request.new(
+            Messenger::Elements::Text.new(text: "Your brands are #{items.map(&:name).join(', ')}"),
+            fb_params.sender_id
           )
-          createButtonTemplate(
-              'Select a brand that you know and wear or would like to wear.',
-              'no data'
-          )
+        )
+        createButtonTemplate(
+          'Select a brand that you know and wear or would like to wear.',
+          'no data'
+        )
       end
     end
     render nothing: true, status: 200

@@ -1,19 +1,18 @@
 class User < ActiveRecord::Base
 	has_many :matches
 
-
-	def matching_brands
-		types = %i{gender type style price music mood personality}
+	def matching_items
+		options = %i{brand platform camera price_category sim_count cpu_category}
 		where = []
 		args = []
-		types.each do |type|
-			value = self.attributes[type.to_s]
+		options.each do |option|
+			value = self.attributes[option.to_s]
 			unless value.nil?
 				where.push('(key = ? AND value=?)')
 				args.push(type.upcase, value.upcase)
 			end
 		end
-		ids = BrandOption.where(where.join(' OR '), *args).group(:brand_id).order('COUNT(*) DESC').pluck(:brand_id)
-		Brand.where(id: ids)
+		ids = ItemOption.where(where.join(' OR '), *args).group(:item_id).order('COUNT(*) DESC').pluck(:item_id)
+		Item.where(id: ids)
 	end
 end

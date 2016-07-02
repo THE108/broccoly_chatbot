@@ -11,48 +11,50 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160625171045) do
+ActiveRecord::Schema.define(version: 20160702133926) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "brand_options", force: :cascade do |t|
-    t.integer  "brand_id"
+  create_table "item_options", force: :cascade do |t|
+    t.integer  "item_id"
     t.string   "key"
     t.string   "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "brands", force: :cascade do |t|
+  create_table "items", force: :cascade do |t|
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.string   "facebook_id"
     t.string   "name"
     t.string   "page_URL"
+    t.string   "picture_URL"
+    t.integer  "price"
   end
 
   create_table "matches", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "user_id"
-    t.integer  "brand_id"
+    t.integer  "item_id"
     t.boolean  "match"
   end
 
   create_table "users", force: :cascade do |t|
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.string   "facebook_id"
     t.string   "first_name"
     t.string   "last_name"
     t.string   "gender"
-    t.string   "type"
-    t.string   "style"
-    t.string   "price"
-    t.string   "music"
-    t.string   "mood"
-    t.string   "personality"
+    # options
+    t.string   "brand"
+    t.string   "platform"
+    t.string   "camera"
+    t.string   "price_category"
+    t.string   "sim_count"
+    t.string   "cpu_category"
   end
 
 end

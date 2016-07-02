@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :item_options
   get 'welcome/index'
 
   resources :users

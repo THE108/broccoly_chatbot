@@ -30,7 +30,7 @@ Bot.on :postback do |postback|
 
   case value
     when 'Go!'
-      createButtonTemplate(
+      createQuickReply(
           postback.sender,
           'Great. Which is your favorite color?',
           'Silver',
@@ -39,7 +39,7 @@ Bot.on :postback do |postback|
       )
     when 'Silver', 'Grey', 'Gold'
       User.where(facebook_id: sender_id).update_all(color: value)
-      createButtonTemplate(
+      createQuickReply(
           postback.sender,
           'What is your preffered mobile platform?',
           'iOS',
@@ -48,7 +48,7 @@ Bot.on :postback do |postback|
       )
     when 'iOS', 'Android', 'Windows'
       User.where(facebook_id: sender_id).update_all(platform: value)
-      createButtonTemplate(
+      createQuickReply(
           postback.sender,
           'In what price tier do you prefer to shop?',
           'Mass Market (<$200)',
@@ -128,10 +128,9 @@ def createButtonTemplate(sender, name, *options)
           }
       }
   )
-  end
 end
 
-def createQuickReplie(sender, name, *options)
+def createQuickReply(sender, name, *options)
   replies = []
   options.each do |val|
     replies.push({

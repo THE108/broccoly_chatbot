@@ -7,7 +7,6 @@ Bot.on :message do |message|
 
   unless message.echo?
     if message.text == "secret"
-      User.where(facebook_id: sender_id).update_all(cpu_category: value)
       item = User.find_by(facebook_id: sender_id).matching_item
       createGenericTemplateForItem(sender_id, item)
     else

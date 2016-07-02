@@ -84,15 +84,18 @@ Bot.on :postback do |postback|
 end
 
 def save_user(sender_id)
-  # unless User.exists?(facebook_id: fb_params.first_entry.sender_id)
-  #   fb_data = JSON.parse(Messenger::Client.get_user_profile(fb_params.first_entry.sender_id))
-  #   User.create(
-  #       facebook_id: fb_params.first_entry.sender_id,
-  #       first_name: fb_data['first_name'],
-  #       last_name: fb_data['last_name']
-  #   )
-  #
-  # end
+  unless User.exists?(facebook_id: sender_id)
+
+    response = HTTParty.get("https://graph.facebook.com/v2.6/#{sender_id}?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=#{ENV['MESSENGER_PAGE_ACCESS_TOKEN']}")
+    fb_data = JSON.parse(response.body)
+
+    User.create(
+        facebook_id: sender_id,
+        first_name: fb_data['first_name'],
+        last_name: fb_data['last_name']
+    )
+
+  end
 end
 
 

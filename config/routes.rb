@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  use_doorkeeper
+  get 'oauth/authorize'
+
+  # use_doorkeeper
   resources :item_options
   get 'welcome/index'
 

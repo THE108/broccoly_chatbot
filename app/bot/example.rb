@@ -84,8 +84,11 @@ Bot.on :postback do |postback|
   save_user(sender_id)
 
   case value
-    when 'Go!'
+  when 'Go!', 'restart'
       start_question(postback.sender)
+  when 'result'
+    items = User.find_by(facebook_id: sender_id).matching_items
+    createGenericTemplateForItems(sender_id, items)
   end
 end
 

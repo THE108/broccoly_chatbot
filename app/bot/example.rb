@@ -76,6 +76,13 @@ Bot.on :message do |message|
             FbUser.where(facebook_id: sender_id).update_all(cpu_category: value)
             items = FbUser.find_by(facebook_id: sender_id).matching_items
             createGenericTemplateForItems(sender_id, items)
+          when 'Confirm'
+            Bot.deliver(
+              recipient: message.sender,
+              message: {
+                text: 'Thanks for your order!'
+              }
+            )
         end
       end
     end
@@ -326,6 +333,8 @@ def createReceipt(sender_id, items)
         }
       }
     )
+
+    createQuickReply({id: sender_id}, 'Confirm?', 'Confirm')
 end
 
 def getOrderSummary(items)

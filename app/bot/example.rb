@@ -8,7 +8,7 @@ Bot.on :message do |message|
   unless message.echo?
     if message.text == "result"
       item = User.find_by(facebook_id: sender_id).matching_item
-      createGenericTemplateForItem(sender_id, item)
+      createGenericTemplateForItems(sender_id, [item])
     elsif message.text == 'restart'
       start_question(message.sender)
     elsif message.messaging['message']['quick_reply']
@@ -159,8 +159,23 @@ def createQuickReply(sender, name, *options)
   )
 end
 
-def createGenericTemplateForItem(sender_id, item)
+def createGenericTemplateForItems(sender_id, items)
   voucher = getVoucher()
+  elements = []
+  items.each do |item|
+    elements << {
+      title: item.name,
+      image_url: item.picture_URL,
+      subtitle: "Special price for you $#{item.price}! Use voucher #{voucher} to have a discount!",
+      buttons:[
+        {
+          type:"web_url",
+          url: item.page_URL,
+          title:"Buy now!"
+        }
+      ]
+    }
+  end
   Bot.deliver(
       recipient: {
           id: sender_id,
@@ -170,20 +185,7 @@ def createGenericTemplateForItem(sender_id, item)
               type: 'template',
               payload: {
                   template_type: "generic",
-                  elements:[
-                      {
-                          title: item.name,
-                          image_url: item.picture_URL,
-                          subtitle: "Special price for you $#{item.price}! Use voucher #{voucher} to have a discount!",
-                          buttons:[
-                              {
-                                  type:"web_url",
-                                  url: item.page_URL,
-                                  title:"Buy now!"
-                              }
-                          ]
-                      }
-                  ]
+                  elements: elements,
               }
           }
       }

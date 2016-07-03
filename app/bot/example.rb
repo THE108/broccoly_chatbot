@@ -66,13 +66,6 @@ Bot.on :message do |message|
           items = FbUser.find_by(facebook_id: sender_id).matching_items
           createGenericTemplateForItems(sender_id, items)
       end
-    else
-      Bot.deliver(
-          recipient: message.sender,
-          message: {
-              text: 'Hello, human!'
-          }
-      )
     end
   end
 end
@@ -100,6 +93,14 @@ Bot.on :account_linking do |linking|
   end
 end
 
+Bot.on :optin do |opt|
+  Bot.deliver(
+    recipient: opt.sender,
+    message: {
+      text: "You just sent ref: #{opt.ref}"
+    }
+  )
+end
 
 def start_question(sender)
   createQuickReply(

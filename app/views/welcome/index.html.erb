@@ -1,7 +1,7 @@
 <script>
   window.fbAsyncInit = function() {
     FB.init({
-      appId      : '843597152451383',
+      appId      : '1091621010957932',
       xfbml      : true,
       version    : 'v2.6'
     });
@@ -17,16 +17,22 @@
 </script>
 
 <div class="fb-send-to-messenger"
-     messenger_app_id="843597152451383"
-     page_id="1712905742296235"
-     data-ref=""
+     messenger_app_id="1091621010957932"
+     page_id="255096811549063"
+     data-ref="FROM_SITE"
      color="blue"
      size="standard"></div>
 
 
 <div class="fb-messengermessageus"
-     messenger_app_id="843597152451383"
-     page_id="1712905742296235"
+     messenger_app_id="1091621010957932"
+     page_id="255096811549063"
      color="blue"
      size="standard" ></div>
-<div>Hello, world!</div>
+
+<% if signed_in? %>
+    <%= current_user.email %>
+    <%= button_to "Sign out", sign_out_path, method: :delete %>
+<% else %>
+    <%= link_to "Sign in", sign_in_path %>
+<% end %>

@@ -16,7 +16,7 @@ task :thread => [:environment] do
     call_to_actions: [
       {
         type: 'postback',
-        title: 'Show onsale items',
+        title: 'Onsale items',
         payload: 'result'
       },
       {
@@ -26,7 +26,7 @@ task :thread => [:environment] do
       },
       {
         type: 'web_url',
-        title: 'Visit Website',
+        title: 'Visit Lazada',
         url: 'http://www.lazada.com.my/'
       }
     ]

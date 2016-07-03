@@ -93,6 +93,25 @@ Bot.on :postback do |postback|
   when 'result'
     items = FbUser.find_by(facebook_id: sender_id).matching_items
     createGenericTemplateForItems(sender_id, items)
+  when 'BUY_NOW'
+    Bot.deliver(
+      recipient: postback.sender,
+      message: {
+        text: 'Please, share you location, like on picture'
+      }
+    )
+
+    Bot.deliver(
+      recipient: postback.sender,
+      message: {
+        attachment: {
+          type: 'image',
+          payload: {
+            url: 'http://lazada-fb-bot.herokuapp.com/share_location.jpg'
+          }
+        }
+      }
+    )
   end
 end
 

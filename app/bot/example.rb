@@ -12,7 +12,7 @@ Bot.on :message do |message|
     elsif message.text == 'restart'
       start_question(message.sender)
     elsif message.text == 'login'
-
+      login(sender_id)
     elsif message.messaging['message']['quick_reply']
       value = message.text
       case value

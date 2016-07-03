@@ -293,33 +293,34 @@ def createReceipt(sender_id, items)
       recipient: {
         id: sender_id,
       },
-    message: {
-      attachment: {
-        type: 'template',
-        payload: {
-          "template_type": "receipt",
-          "recipient_name": "#{user.first_name} #{user.last_name}",
-          "order_number": "12345678902",
-          "currency": "USD",
-          "payment_method": "Visa 2345",
-          "order_url": "http://petersapparel.parseapp.com/order?order_id=123456",
-          "timestamp": Time.now.to_i,
-          "elements": elements,
-          address: getAddress(sender_id),
-          summary: getOrderSummary(items),
-          "adjustments":[
-            {
-              "name":"New Customer Discount",
-              "amount":20
-            },
-            {
-              "name":"$10 Off Coupon",
-              "amount":10
-            }
-          ]
+      message: {
+        attachment: {
+          type: 'template',
+          payload: {
+            "template_type": "receipt",
+            "recipient_name": "#{user.first_name} #{user.last_name}",
+            "order_number": "12345678902",
+            "currency": "USD",
+            "payment_method": "Visa 2345",
+            "order_url": "http://petersapparel.parseapp.com/order?order_id=123456",
+            "timestamp": Time.now.to_i,
+            "elements": elements,
+            address: getAddress(sender_id),
+            summary: getOrderSummary(items),
+            "adjustments":[
+              {
+                "name":"New Customer Discount",
+                "amount":20
+              },
+              {
+                "name":"$10 Off Coupon",
+                "amount":10
+              }
+            ]
+          }
         }
       }
-    }
+    )
 end
 
 def getOrderSummary(items)

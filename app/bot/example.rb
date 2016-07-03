@@ -13,11 +13,15 @@ Bot.on :message do |message|
       start_question(message.sender)
     elsif message.text == 'login'
       login(sender_id)
-    elsif message.messaging.key?('payload') && message.messaging['payload'].key?('coordinates')
-      FbUser.where(facebook_id: sender_id).update_all(
-        lat: message.messaging['payload']['coordinates']['lat'],
-        long: message.messaging['payload']['coordinates']['long']
-      )
+    elsif message.attachments.size > 0
+      message.attachments.each do |attachment|
+        if attachment.key?('payload') && attachment['payload'].key?('coordinates')
+          FbUser.where(facebook_id: sender_id).update_all(
+            lat: attachment['payload']['coordinates']['lat'],
+            long: attachment['payload']['coordinates']['long']
+          )
+        end
+      end
     elsif message.messaging['message']['quick_reply']
       value = message.text
       case value

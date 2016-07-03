@@ -13,6 +13,6 @@ class User < ActiveRecord::Base
 			end
 		end
 		item_ids = ItemOption.where(where.join(' OR '), *args).group(:item_id).order('COUNT(*) DESC').limit(3).pluck(:item_id)
-		Item.find_by(id: item_ids)
+		Item.where(id: item_ids)
 	end
 end

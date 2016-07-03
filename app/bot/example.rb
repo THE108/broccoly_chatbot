@@ -62,7 +62,7 @@ Bot.on :message do |message|
         when 'I love it', 'Sometimes', 'Never'
           User.where(facebook_id: sender_id).update_all(cpu_category: value)
           item = User.find_by(facebook_id: sender_id).matching_item
-          createGenericTemplateForItem(sender_id, item)
+          createGenericTemplateForItems(sender_id, [item])
       end
     else
       Bot.deliver(

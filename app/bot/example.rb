@@ -105,7 +105,7 @@ end
 def start_question(sender)
   createQuickReply(
       sender,
-      'Hi!. Answer some questions and we\'ll find what you like on Lazada and provide you with discount. Which is your favorite color?',
+      'Hi! Answer some questions and we\'ll find what you like on Lazada and provide you with discount. Which is your favorite color?',
       'Silver',
       'Grey',
       'Gold',
@@ -179,11 +179,16 @@ def createGenericTemplateForItems(sender_id, items)
     elements << {
       title: item.name,
       image_url: item.picture_URL,
-      subtitle: "Special price for you $#{item.price}! Use voucher #{voucher} to have a discount!",
+      subtitle: "Special price for you $#{item.price}! Use voucher '#{voucher.to_upper}' to have a discount!",
       buttons:[
         {
           type:"web_url",
           url: item.page_URL,
+          title:"See details"
+        },
+        {
+          type:"web_url",
+          payload: "BUY_NOW",
           title:"Buy now!"
         }
       ]
@@ -216,7 +221,7 @@ def login(sender_id)
         payload: {
           template_type: "generic",
           elements: [{
-            title: 'Welcome',
+            title: 'Welcome!',
             image_url: 'http://vignette3.wikia.nocookie.net/logopedia/images/f/fb/Lazada_logo_new.png/revision/latest?cb=20150131203825',
             buttons: [{
               type: 'account_link',

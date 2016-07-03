@@ -1,10 +1,11 @@
 Rails.application.routes.draw do
+  use_doorkeeper
   resources :item_options
   get 'welcome/index'
 
   # post 'messenger/webhook'
   # get 'messenger/webhook'
-  resources :users
+  resources :fb_users
   resources :brands
   mount Facebook::Messenger::Server, at: 'messenger'
   # The priority is based upon order of creation: first created -> highest priority.

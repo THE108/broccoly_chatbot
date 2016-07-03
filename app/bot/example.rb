@@ -7,7 +7,7 @@ Bot.on :message do |message|
 
   unless message.echo?
     if message.text == 'result'
-      items = User.find_by(facebook_id: sender_id).matching_items
+      items = FbUser.find_by(facebook_id: sender_id).matching_items
       createGenericTemplateForItems(sender_id, items)
     elsif message.text == 'restart'
       start_question(message.sender)
@@ -17,7 +17,7 @@ Bot.on :message do |message|
       value = message.text
       case value
         when 'Silver', 'Grey', 'Gold'
-          User.where(facebook_id: sender_id).update_all(color: value)
+          FbUser.where(facebook_id: sender_id).update_all(color: value)
           createQuickReply(
               message.sender,
               'What is your preffered mobile platform?',
@@ -26,7 +26,7 @@ Bot.on :message do |message|
               'Windows',
           )
         when 'iOS', 'Android', 'Windows'
-          User.where(facebook_id: sender_id).update_all(platform: value)
+          FbUser.where(facebook_id: sender_id).update_all(platform: value)
           createQuickReply(
               message.sender,
               'In what price tier do you prefer to shop?',
@@ -35,7 +35,7 @@ Bot.on :message do |message|
               '$400-1000+',
           )
         when '<$200', '$200-400', '$400-1000+'
-          User.where(facebook_id: sender_id).update_all(price_category: value)
+          FbUser.where(facebook_id: sender_id).update_all(price_category: value)
           createQuickReply(
               message.sender,
               'Cool! Do you like to take fotos?',
@@ -44,7 +44,7 @@ Bot.on :message do |message|
               'Not at all',
           )
         when 'Sure', 'Not so much', 'Not at all'
-          User.where(facebook_id: sender_id).update_all(camera: value)
+          FbUser.where(facebook_id: sender_id).update_all(camera: value)
           createQuickReply(
               message.sender,
               'And how many sim cards you would like to have?',
@@ -53,7 +53,7 @@ Bot.on :message do |message|
               'Three or more',
           )
         when 'Only one', 'Two', 'Three or more'
-          User.where(facebook_id: sender_id).update_all(sim_count: value)
+          FbUser.where(facebook_id: sender_id).update_all(sim_count: value)
           createQuickReply(
               message.sender,
               'Do you like playing games on your mobile phone?',
@@ -62,8 +62,8 @@ Bot.on :message do |message|
               'Never',
           )
         when 'I love it', 'Sometimes', 'Never'
-          User.where(facebook_id: sender_id).update_all(cpu_category: value)
-          items = User.find_by(facebook_id: sender_id).matching_items
+          FbUser.where(facebook_id: sender_id).update_all(cpu_category: value)
+          items = FbUser.find_by(facebook_id: sender_id).matching_items
           createGenericTemplateForItems(sender_id, items)
       end
     else
@@ -89,14 +89,14 @@ Bot.on :postback do |postback|
   when 'Go!', 'restart'
       start_question(postback.sender)
   when 'result'
-    items = User.find_by(facebook_id: sender_id).matching_items
+    items = FbUser.find_by(facebook_id: sender_id).matching_items
     createGenericTemplateForItems(sender_id, items)
   end
 end
 
 Bot.on :account_linking do |linking|
   if linking.status == 'linked'
-    User.where(facebook_id: linking.sender['id']).update_all(auth_code: linking.auth_code)
+    FbUser.where(facebook_id: linking.sender['id']).update_all(auth_code: linking.auth_code)
   end
 end
 
@@ -112,12 +112,12 @@ def start_question(sender)
 end
 
 def save_user(sender_id)
-  unless User.exists?(facebook_id: sender_id)
+  unless FbUser.exists?(facebook_id: sender_id)
 
     response = HTTParty.get("https://graph.facebook.com/v2.6/#{sender_id}?fields=first_name,last_name,profile_pic,locale,timezone,gender&access_token=#{ENV['MESSENGER_PAGE_ACCESS_TOKEN']}")
     fb_data = JSON.parse(response.body)
 
-    User.create(
+    FbUser.create(
         facebook_id: sender_id,
         first_name: fb_data['first_name'],
         last_name: fb_data['last_name']

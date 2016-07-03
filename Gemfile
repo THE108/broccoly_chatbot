@@ -54,4 +54,6 @@ end
 gem 'facebook-messenger', git: 'https://github.com/stamm/facebook-messenger.git'
 # gem 'rest-client', '1.8.0'
 
-gem 'puma'
+gem 'puma', '3.4.0'
+gem 'doorkeeper', '4.0.0'
+gem 'clearance', '1.14.1'

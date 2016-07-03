@@ -291,7 +291,7 @@ def createReceipt(sender_id, items)
     elements = []
     items = FbUser.find_by(facebook_id: sender_id).matching_items
     items.each_with_index do |item, i|
-      {
+      elements << {
         "title": item.name,
         "subtitle": "phone",
         "quantity":i+1,

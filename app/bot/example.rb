@@ -224,8 +224,8 @@ def login(sender_id)
     recipient: {
       id: sender_id,
     },
-    message:{
-      attachment:{
+    message: {
+      attachment: {
         type: 'template',
         payload: {
           template_type: "generic",
@@ -245,4 +245,87 @@ end
 
 def getVoucher
   rand(36**5).to_s(36)
+end
+
+def createReceipt(sender_id, items)
+    user = FbUser.find_by(facebook_id: sender_id)
+
+    elements = [
+      {
+        "title":"Classic White T-Shirt",
+        "subtitle":"100% Soft and Luxurious Cotton",
+        "quantity":2,
+        "price":50,
+        "currency":"USD",
+        "image_url":"http://petersapparel.parseapp.com/img/whiteshirt.png"
+      },
+      {
+        "title":"Classic Gray T-Shirt",
+        "subtitle":"100% Soft and Luxurious Cotton",
+        "quantity":1,
+        "price":25,
+        "currency":"USD",
+        "image_url":"http://petersapparel.parseapp.com/img/grayshirt.png"
+      }
+    ]
+
+    Bot.deliver(
+      recipient: {
+        id: sender_id,
+      },
+    message: {
+      attachment: {
+        type: 'template',
+        payload: {
+          "template_type": "receipt",
+          "recipient_name": "#{user.first_name} #{user.last_name}",
+          "order_number": "12345678902",
+          "currency": "USD",
+          "payment_method": "Visa 2345",
+          "order_url": "http://petersapparel.parseapp.com/order?order_id=123456",
+          "timestamp": Time.now.to_i,
+          "elements": elements,
+          address: getAddress(sender_id),
+          summary: getOrderSummary(items),
+          "adjustments":[
+            {
+              "name":"New Customer Discount",
+              "amount":20
+            },
+            {
+              "name":"$10 Off Coupon",
+              "amount":10
+            }
+          ]
+        }
+      }
+    }
+end
+
+def getOrderSummary(items)
+    items.each do |item|
+        subtotal += item.price
+    end
+
+    shipping_cost = subtotal * 0.2
+    total_tax = (subtotal + shipping_cost) * 0.1
+    total_cost = subtotal + shipping_cost + total_tax
+
+    {
+      subtotal: subtotal,
+      shipping_cost: shipping_cost,
+      total_tax: total_tax,
+      total_cost: total_cost
+    }
+end
+
+def getAddress(sender_id)
+    {
+      "street_1": "1 Hacker Way",
+      "street_2": "",
+      "city": "Menlo Park",
+      "postal_code": "94025",
+      "state": "CA",
+      "country": "US"
+    }
 end

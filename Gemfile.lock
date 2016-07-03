@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/stamm/facebook-messenger.git
-  revision: 2321c7114dbf1598ea91ab3838ed1e137b3270a4
+  revision: 79efc9be36288b8031435e437465b8019feb7b9e
   specs:
     facebook-messenger (0.7.0)
       httparty (~> 0.13.7)

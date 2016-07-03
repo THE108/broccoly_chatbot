@@ -6,11 +6,13 @@ Bot.on :message do |message|
   save_user(sender_id)
 
   unless message.echo?
-    if message.text == "result"
+    if message.text == 'result'
       items = User.find_by(facebook_id: sender_id).matching_items
       createGenericTemplateForItems(sender_id, items)
     elsif message.text == 'restart'
       start_question(message.sender)
+    elsif message.text == 'login'
+
     elsif message.messaging['message']['quick_reply']
       value = message.text
       case value
@@ -91,6 +93,13 @@ Bot.on :postback do |postback|
     createGenericTemplateForItems(sender_id, items)
   end
 end
+
+Bot.on :account_linking do |linking|
+  if linking.status == 'linked'
+    User.where(facebook_id: linking.sender['id']).update_all(auth_code: linking.auth_code)
+  end
+end
+
 
 def start_question(sender)
   createQuickReply(
@@ -192,6 +201,30 @@ def createGenericTemplateForItems(sender_id, items)
               }
           }
       }
+  )
+end
+
+def login(sender_id)
+  Bot.deliver(
+    recipient: {
+      id: sender_id,
+    },
+    message:{
+      attachment:{
+        type: 'template',
+        payload: {
+          template_type: "generic",
+          elements: [{
+            title: 'Welcome',
+            image_url: 'http://vignette3.wikia.nocookie.net/logopedia/images/f/fb/Lazada_logo_new.png/revision/latest?cb=20150131203825',
+            buttons: [{
+              type: 'account_link',
+              url: 'https://lazada-fb-bot.herokuapp.com/oauth/authorize'
+            }]
+          }],
+        }
+      }
+    }
   )
 end
 

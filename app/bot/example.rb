@@ -7,8 +7,8 @@ Bot.on :message do |message|
 
   unless message.echo?
     if message.text == "result"
-      item = User.find_by(facebook_id: sender_id).matching_item
-      createGenericTemplateForItems(sender_id, [item])
+      items = User.find_by(facebook_id: sender_id).matching_items
+      createGenericTemplateForItems(sender_id, items)
     elsif message.text == 'restart'
       start_question(message.sender)
     elsif message.messaging['message']['quick_reply']
@@ -61,8 +61,8 @@ Bot.on :message do |message|
           )
         when 'I love it', 'Sometimes', 'Never'
           User.where(facebook_id: sender_id).update_all(cpu_category: value)
-          item = User.find_by(facebook_id: sender_id).matching_item
-          createGenericTemplateForItems(sender_id, [item])
+          items = User.find_by(facebook_id: sender_id).matching_items
+          createGenericTemplateForItems(sender_id, items)
       end
     else
       Bot.deliver(

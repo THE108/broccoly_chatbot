@@ -208,7 +208,7 @@ def createGenericTemplateForItems(sender_id, items)
     elements << {
       title: item.name,
       image_url: item.picture_URL,
-      subtitle: "Special price for you $#{item.price}! Use voucher '#{voucher.to_upper}' to have a discount!",
+      subtitle: "Special price for you $#{item.price}! Use voucher '#{voucher.upcase}' to have a discount!",
       buttons:[
         {
           type:"web_url",

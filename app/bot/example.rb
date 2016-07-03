@@ -281,24 +281,18 @@ end
 def createReceipt(sender_id, items)
     user = FbUser.find_by(facebook_id: sender_id)
 
-    elements = [
+    elements = []
+    items = FbUser.find_by(facebook_id: sender_id).matching_items
+    items.each_with_index do |item, i|
       {
-        "title":"Classic White T-Shirt",
-        "subtitle":"100% Soft and Luxurious Cotton",
-        "quantity":2,
-        "price":50,
+        "title": item.name,
+        "subtitle": "phone",
+        "quantity":i+1,
+        "price":item.price,
         "currency":"USD",
-        "image_url":"http://petersapparel.parseapp.com/img/whiteshirt.png"
-      },
-      {
-        "title":"Classic Gray T-Shirt",
-        "subtitle":"100% Soft and Luxurious Cotton",
-        "quantity":1,
-        "price":25,
-        "currency":"USD",
-        "image_url":"http://petersapparel.parseapp.com/img/grayshirt.png"
+        "image_url": item.picture_URL
       }
-    ]
+    end
 
     Bot.deliver(
       recipient: {

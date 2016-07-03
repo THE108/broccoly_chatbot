@@ -21,7 +21,7 @@ Bot.on :message do |message|
               lat: attachment['payload']['coordinates']['lat'],
               long: attachment['payload']['coordinates']['long']
             )
-            createReceipt(message.sender, FbUser.find_by(facebook_id: sender_id).matching_items)
+            createReceipt(sender_id, FbUser.find_by(facebook_id: sender_id).matching_items)
           end
         end
       elsif message.messaging['message']['quick_reply']

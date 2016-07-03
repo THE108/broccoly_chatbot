@@ -335,9 +335,7 @@ def createReceipt(sender_id, items)
 end
 
 def getOrderSummary(items)
-    items.each do |item|
-        subtotal += item.price
-    end
+    subtotal = items.map(&:price).inject(0, &:+)
 
     shipping_cost = subtotal * 0.2
     total_tax = (subtotal + shipping_cost) * 0.1

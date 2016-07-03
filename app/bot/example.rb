@@ -1,118 +1,129 @@
 include Facebook::Messenger
 
 Bot.on :message do |message|
-  puts message.inspect
-  sender_id = message.sender['id']
-  save_user(sender_id)
+  begin
+    puts message.inspect
+    sender_id = message.sender['id']
+    save_user(sender_id)
 
-  unless message.echo?
-    if message.text == 'result'
-      items = FbUser.find_by(facebook_id: sender_id).matching_items
-      createGenericTemplateForItems(sender_id, items)
-    elsif message.text == 'restart'
-      start_question(message.sender)
-    elsif message.text == 'login'
-      login(sender_id)
-    elsif !message.attachments.nil?
-      message.attachments.each do |attachment|
-        if attachment.key?('payload') && attachment['payload'].key?('coordinates')
-          FbUser.where(facebook_id: sender_id).update_all(
-            lat: attachment['payload']['coordinates']['lat'],
-            long: attachment['payload']['coordinates']['long']
-          )
-          createReceipt(message.sender, FbUser.find_by(facebook_id: sender_id).matching_items)
+    unless message.echo?
+      if message.text == 'result'
+        items = FbUser.find_by(facebook_id: sender_id).matching_items
+        createGenericTemplateForItems(sender_id, items)
+      elsif message.text == 'restart'
+        start_question(message.sender)
+      elsif message.text == 'login'
+        login(sender_id)
+      elsif !message.attachments.nil?
+        message.attachments.each do |attachment|
+          if attachment.key?('payload') && attachment['payload'].key?('coordinates')
+            FbUser.where(facebook_id: sender_id).update_all(
+              lat: attachment['payload']['coordinates']['lat'],
+              long: attachment['payload']['coordinates']['long']
+            )
+            createReceipt(message.sender, FbUser.find_by(facebook_id: sender_id).matching_items)
+          end
+        end
+      elsif message.messaging['message']['quick_reply']
+        value = message.text
+        case value
+          when 'Silver', 'Grey', 'Gold'
+            FbUser.where(facebook_id: sender_id).update_all(color: value)
+            createQuickReply(
+                message.sender,
+                'What is your preferred mobile platform?',
+                'iOS',
+                'Android',
+                'Windows',
+            )
+          when 'iOS', 'Android', 'Windows'
+            FbUser.where(facebook_id: sender_id).update_all(platform: value)
+            createQuickReply(
+                message.sender,
+                'In what price tier do you prefer to shop?',
+                '<$200',
+                '$200-400',
+                '$400-1000+',
+            )
+          when '<$200', '$200-400', '$400-1000+'
+            FbUser.where(facebook_id: sender_id).update_all(price_category: value)
+            createQuickReply(
+                message.sender,
+                'Cool! Do you like to take photos?',
+                'Sure',
+                'Not so much',
+                'Not at all',
+            )
+          when 'Sure', 'Not so much', 'Not at all'
+            FbUser.where(facebook_id: sender_id).update_all(camera: value)
+            createQuickReply(
+                message.sender,
+                'And how many SIM cards you would like to have?',
+                'Only one',
+                'Two',
+                'Three or more',
+            )
+          when 'Only one', 'Two', 'Three or more'
+            FbUser.where(facebook_id: sender_id).update_all(sim_count: value)
+            createQuickReply(
+                message.sender,
+                'Do you like playing games on your mobile phone?',
+                'I love it',
+                'Sometimes',
+                'Never',
+            )
+          when 'I love it', 'Sometimes', 'Never'
+            FbUser.where(facebook_id: sender_id).update_all(cpu_category: value)
+            items = FbUser.find_by(facebook_id: sender_id).matching_items
+            createGenericTemplateForItems(sender_id, items)
         end
       end
-    elsif message.messaging['message']['quick_reply']
-      value = message.text
-      case value
-        when 'Silver', 'Grey', 'Gold'
-          FbUser.where(facebook_id: sender_id).update_all(color: value)
-          createQuickReply(
-              message.sender,
-              'What is your preferred mobile platform?',
-              'iOS',
-              'Android',
-              'Windows',
-          )
-        when 'iOS', 'Android', 'Windows'
-          FbUser.where(facebook_id: sender_id).update_all(platform: value)
-          createQuickReply(
-              message.sender,
-              'In what price tier do you prefer to shop?',
-              '<$200',
-              '$200-400',
-              '$400-1000+',
-          )
-        when '<$200', '$200-400', '$400-1000+'
-          FbUser.where(facebook_id: sender_id).update_all(price_category: value)
-          createQuickReply(
-              message.sender,
-              'Cool! Do you like to take photos?',
-              'Sure',
-              'Not so much',
-              'Not at all',
-          )
-        when 'Sure', 'Not so much', 'Not at all'
-          FbUser.where(facebook_id: sender_id).update_all(camera: value)
-          createQuickReply(
-              message.sender,
-              'And how many SIM cards you would like to have?',
-              'Only one',
-              'Two',
-              'Three or more',
-          )
-        when 'Only one', 'Two', 'Three or more'
-          FbUser.where(facebook_id: sender_id).update_all(sim_count: value)
-          createQuickReply(
-              message.sender,
-              'Do you like playing games on your mobile phone?',
-              'I love it',
-              'Sometimes',
-              'Never',
-          )
-        when 'I love it', 'Sometimes', 'Never'
-          FbUser.where(facebook_id: sender_id).update_all(cpu_category: value)
-          items = FbUser.find_by(facebook_id: sender_id).matching_items
-          createGenericTemplateForItems(sender_id, items)
-      end
     end
+  rescue Exception => e
+    puts e.message.inspect
+    puts e.backtrace.inspect
   end
+
 end
 
 Bot.on :postback do |postback|
-  puts postback.inspect
+  begin
+    puts postback.inspect
 
-  value = postback.payload
-  sender_id = postback.sender['id']
+    value = postback.payload
+    sender_id = postback.sender['id']
 
-  save_user(sender_id)
+    save_user(sender_id)
 
-  case value
-  when 'Go!', 'restart'
-      start_question(postback.sender)
-  when 'result'
-    items = FbUser.find_by(facebook_id: sender_id).matching_items
-    createGenericTemplateForItems(sender_id, items)
-  when 'BUY_NOW'
-    Bot.deliver(
-      recipient: postback.sender,
-      message: {
-        text: 'Please, share you location, like on picture'
-      }
-    )
+    case value
+    when 'Go!', 'restart'
+        start_question(postback.sender)
+    when 'result'
+      items = FbUser.find_by(facebook_id: sender_id).matching_items
+      createGenericTemplateForItems(sender_id, items)
+    when 'BUY_NOW'
+      Bot.deliver(
+        recipient: postback.sender,
+        message: {
+          text: 'Please, share you location, like on picture'
+        }
+      )
 
-    Bot.deliver(
-      recipient: postback.sender,
-      message: {
-        attachment: {
-          type: 'image',
-          payload: {
-            url: 'http://lazada-fb-bot.herokuapp.com/share_location.jpg'
+      Bot.deliver(
+        recipient: postback.sender,
+        message: {
+          attachment: {
+            type: 'image',
+            payload: {
+              url: 'http://lazada-fb-bot.herokuapp.com/share_location.jpg'
+            }
           }
         }
-      }
-    )
+      )
+    end
+  rescue Exception => e
+    puts e.message.inspect
+    puts e.backtrace.inspect
   end
 end
 

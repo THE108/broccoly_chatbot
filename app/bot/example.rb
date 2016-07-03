@@ -227,7 +227,7 @@ def createGenericTemplateForItems(sender_id, items)
           title:"See details"
         },
         {
-          type:"web_url",
+          type:"postback",
           payload: "BUY_NOW",
           title:"Buy now!"
         }

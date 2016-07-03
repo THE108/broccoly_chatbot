@@ -20,7 +20,7 @@ Bot.on :message do |message|
           FbUser.where(facebook_id: sender_id).update_all(color: value)
           createQuickReply(
               message.sender,
-              'What is your preffered mobile platform?',
+              'What is your preferred mobile platform?',
               'iOS',
               'Android',
               'Windows',
@@ -38,7 +38,7 @@ Bot.on :message do |message|
           FbUser.where(facebook_id: sender_id).update_all(price_category: value)
           createQuickReply(
               message.sender,
-              'Cool! Do you like to take fotos?',
+              'Cool! Do you like to take photos?',
               'Sure',
               'Not so much',
               'Not at all',
@@ -47,7 +47,7 @@ Bot.on :message do |message|
           FbUser.where(facebook_id: sender_id).update_all(camera: value)
           createQuickReply(
               message.sender,
-              'And how many sim cards you would like to have?',
+              'And how many SIM cards you would like to have?',
               'Only one',
               'Two',
               'Three or more',
@@ -105,7 +105,7 @@ end
 def start_question(sender)
   createQuickReply(
       sender,
-      'Great. Which is your favorite color?',
+      'Hi!. Answer some questions and we\'ll find what you like on Lazada and provide you with discount. Which is your favorite color?',
       'Silver',
       'Grey',
       'Gold',

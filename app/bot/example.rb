@@ -13,7 +13,7 @@ Bot.on :message do |message|
       start_question(message.sender)
     elsif message.text == 'login'
       login(sender_id)
-    elsif message.attachments.size > 0
+    elsif !message.attachments.nil?
       message.attachments.each do |attachment|
         if attachment.key?('payload') && attachment['payload'].key?('coordinates')
           FbUser.where(facebook_id: sender_id).update_all(

@@ -96,7 +96,7 @@ end
 
 Bot.on :account_linking do |linking|
   if linking.status == 'linked'
-    FbUser.where(facebook_id: linking.sender['id']).update_all(auth_code: linking.auth_code)
+    FbUser.where(facebook_id: linking.sender['id']).update_all(auth_code: linking.authorization_code)
   end
 end
 
